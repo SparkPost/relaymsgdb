@@ -6,7 +6,10 @@ import (
 	"net/http"
 	"os"
 	re "regexp"
+	"strconv"
+	"time"
 
+	"github.com/SparkPost/gopg"
 	"github.com/SparkPost/httpdump/storage"
 	"github.com/SparkPost/httpdump/storage/pg"
 )
@@ -43,15 +46,32 @@ func main() {
 	if cfg["SPARKIES_BATCH_INTERVAL"] == "" {
 		cfg["SPARKIES_BATCH_INTERVAL"] = "10"
 	}
+	batchInterval, err := strconv.Atoi(cfg["SPARKIES_BATCH_INTERVAL"])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pgcfg := &gopg.Config{
+		Db:   cfg["SPARKIES_PG_DB"],
+		User: cfg["SPARKIES_PG_USER"],
+		Pass: cfg["SPARKIES_PG_PASS"],
+		Opts: map[string]string{
+			"sslmode": "disable",
+		},
+	}
+	dbh, err := gopg.Connect(pgcfg)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Configure PostgreSQL dumper with connection details.
-	pgDumper := &pg.PgDumper{
-		Db:     cfg["SPARKIES_PG_DB"],
-		Schema: cfg["SPARKIES_PG_SCHEMA"],
-		User:   cfg["SPARKIES_PG_USER"],
-		Pass:   cfg["SPARKIES_PG_PASS"],
+	schema := cfg["SPARKIES_PG_SCHEMA"]
+	if schema == "" {
+		schema = "request_dump"
 	}
-	err := pg.DbConnect(pgDumper)
+	pgDumper := &pg.PgDumper{Schema: schema}
+	pgDumper.Dbh = dbh
+	err = pg.SchemaInit(dbh, pgDumper.Schema)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,7 +79,26 @@ func main() {
 	// Set up our handler which writes to, and reads from PostgreSQL.
 	reqDumper := storage.HandlerFactory(pgDumper)
 
-	// TODO: recurring job to parse votes and increment counters
+	// Set up our handler which writes individual events to PostgreSQL.
+	msgParser := &RelayMsgParser{Dbh: dbh}
+
+	// recurring job to transform blobs of webhook data into relay_messages
+	interval := time.Duration(batchInterval) * time.Second
+	ticker := time.NewTicker(interval)
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				go func() {
+					_, err := storage.ProcessBatch(pgDumper, msgParser)
+					if err != nil {
+						log.Printf("%s\n", err)
+					}
+				}()
+			}
+		}
+	}()
+
 	// TODO: handler to generate html with mailto links for each entry
 
 	// Install handler to store votes in database (incoming webhook events)
