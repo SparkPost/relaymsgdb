@@ -70,17 +70,25 @@ func main() {
 		schema = "request_dump"
 	}
 	pgDumper := &pg.PgDumper{Schema: schema}
-	pgDumper.Dbh = dbh
-	err = pg.SchemaInit(dbh, pgDumper.Schema)
+
+	// make sure schema and raw_requests table exist
+	err = pg.SchemaInit(dbh, schema)
 	if err != nil {
 		log.Fatal(err)
 	}
+	// make sure relay_messages table exists
+	err = SchemaInit(dbh, schema)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pgDumper.Dbh = dbh
 
 	// Set up our handler which writes to, and reads from PostgreSQL.
 	reqDumper := storage.HandlerFactory(pgDumper)
 
 	// Set up our handler which writes individual events to PostgreSQL.
-	msgParser := &RelayMsgParser{Dbh: dbh}
+	msgParser := &RelayMsgParser{Dbh: dbh, Schema: schema}
 
 	// recurring job to transform blobs of webhook data into relay_messages
 	interval := time.Duration(batchInterval) * time.Second
