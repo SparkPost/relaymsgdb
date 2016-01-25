@@ -31,6 +31,7 @@ func main() {
 		"SPARKIES_PG_USER":        word,
 		"SPARKIES_PG_PASS":        nows,
 		"SPARKIES_BATCH_INTERVAL": digits,
+		"SPARKIES_INBOUND_DOMAIN": nows,
 	}
 	// Config container
 	cfg := map[string]string{}
@@ -51,6 +52,9 @@ func main() {
 	batchInterval, err := strconv.Atoi(cfg["SPARKIES_BATCH_INTERVAL"])
 	if err != nil {
 		log.Fatal(err)
+	}
+	if cfg["SPARKIES_INBOUND_DOMAIN"] == "" {
+		cfg["SPARKIES_INBOUND_DOMAIN"] = "hey.avocado.industries"
 	}
 
 	pgcfg := &gopg.Config{
@@ -90,7 +94,11 @@ func main() {
 	reqDumper := storage.HandlerFactory(pgDumper)
 
 	// Set up our handler which writes individual events to PostgreSQL.
-	msgParser := &RelayMsgParser{Dbh: dbh, Schema: schema}
+	msgParser := &RelayMsgParser{
+		Dbh:    dbh,
+		Schema: schema,
+		Domain: cfg["SPARKIES_INBOUND_DOMAIN"],
+	}
 
 	// recurring job to transform blobs of webhook data into relay_messages
 	interval := time.Duration(batchInterval) * time.Second
@@ -112,9 +120,11 @@ func main() {
 	// TODO: handler to generate html with mailto links for each entry
 
 	router := vestigo.NewRouter()
+	GetSummaryHandler := msgParser.SummaryHandler()
 
 	// Install handler to store votes in database (incoming webhook events)
 	router.Post("/incoming", reqDumper)
+	router.Get("/summary/:localpart", GetSummaryHandler)
 
 	portSpec := fmt.Sprintf(":%s", cfg["SPARKIES_HTTP_PORT"])
 	log.Fatal(http.ListenAndServe(portSpec, router))

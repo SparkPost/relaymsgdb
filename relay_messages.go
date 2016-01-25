@@ -4,17 +4,22 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	re "regexp"
 	"strings"
 
 	"github.com/SparkPost/gopg"
 	"github.com/SparkPost/gosparkpost/events"
 	"github.com/SparkPost/httpdump/storage"
+
+	"github.com/husobee/vestigo"
 )
 
 type RelayMsgParser struct {
 	Schema string
+	Domain string
 	Dbh    *sql.DB
 }
 
@@ -142,4 +147,43 @@ func (p *RelayMsgParser) StoreEvent(msg *events.RelayMessage) error {
 		return fmt.Errorf("StoreEvent (INSERT): %s", err)
 	}
 	return nil
+}
+
+func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
+	// TODO: return the following code as a function
+	return func(w http.ResponseWriter, r *http.Request) {
+		localpart := vestigo.Param(r, "localpart")
+		rows, err := p.Dbh.Query(fmt.Sprintf(`
+			SELECT subject, count(*)
+				FROM %s.relay_messages
+			 WHERE smtp_to = $1 ||'@'|| $2
+			 GROUP BY 1
+		`, p.Schema), localpart, p.Domain)
+		if err != nil {
+			w.WriteHeader(500)
+			return
+			//return nil, fmt.Errorf("SummarizeEvents (SELECT): %s", err)
+		}
+		defer rows.Close()
+
+		var res map[string]int
+		for rows.Next() {
+			if rows.Err() == io.EOF {
+				break
+			}
+			var subject string
+			var count int
+			if err = rows.Scan(&subject, &count); err != nil {
+				w.WriteHeader(500)
+				return
+				//return nil, fmt.Errorf("SummarizeEvents (Scan): %s", err)
+			}
+			res[subject] = count
+		}
+		if err = rows.Err(); err != nil {
+			w.WriteHeader(500)
+			return
+			//return nil, fmt.Errorf("SummarizeEvents (Err): %s", err)
+		}
+	}
 }
