@@ -26,6 +26,7 @@ func main() {
 	// Set up validation for config from our environment.
 	envVars := map[string]*re.Regexp{
 		"SPARKIES_HTTP_PORT":      digits,
+		"DATABASE_URL":            nows,
 		"SPARKIES_PG_DB":          word,
 		"SPARKIES_PG_SCHEMA":      word,
 		"SPARKIES_PG_USER":        word,
@@ -64,6 +65,7 @@ func main() {
 		Opts: map[string]string{
 			"sslmode": "disable",
 		},
+		Url: cfg["DATABASE_URL"],
 	}
 	dbh, err := gopg.Connect(pgcfg)
 	if err != nil {
