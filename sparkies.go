@@ -122,11 +122,10 @@ func main() {
 	// TODO: handler to generate html with mailto links for each entry
 
 	router := vestigo.NewRouter()
-	GetSummaryHandler := msgParser.SummaryHandler()
 
 	// Install handler to store votes in database (incoming webhook events)
 	router.Post("/incoming", reqDumper)
-	router.Get("/summary/:localpart", GetSummaryHandler)
+	router.Get("/summary/:localpart", msgParser.SummaryHandler())
 
 	portSpec := fmt.Sprintf(":%s", cfg["SPARKIES_HTTP_PORT"])
 	log.Fatal(http.ListenAndServe(portSpec, router))

@@ -165,7 +165,7 @@ func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
 		}
 		defer rows.Close()
 
-		var res map[string]int
+		res := map[string]int{}
 		for rows.Next() {
 			if rows.Err() == io.EOF {
 				break
@@ -184,5 +184,14 @@ func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
 			http.Error(w, "Database error", http.StatusInternalServerError)
 			return
 		}
+
+		jsonBytes, err := json.Marshal(res)
+		if err != nil {
+			log.Printf("SummarizeEvents (JSON): %s", err)
+			http.Error(w, "Encoding error", http.StatusInternalServerError)
+			return
+		}
+
+		w.Write(jsonBytes)
 	}
 }
