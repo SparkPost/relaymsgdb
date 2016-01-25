@@ -150,7 +150,6 @@ func (p *RelayMsgParser) StoreEvent(msg *events.RelayMessage) error {
 }
 
 func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
-	// TODO: return the following code as a function
 	return func(w http.ResponseWriter, r *http.Request) {
 		localpart := vestigo.Param(r, "localpart")
 		rows, err := p.Dbh.Query(fmt.Sprintf(`
@@ -160,9 +159,9 @@ func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
 			 GROUP BY 1
 		`, p.Schema), localpart, p.Domain)
 		if err != nil {
-			w.WriteHeader(500)
+			log.Printf("SummarizeEvents (SELECT): %s", err)
+			http.Error(w, "Database error", http.StatusInternalServerError)
 			return
-			//return nil, fmt.Errorf("SummarizeEvents (SELECT): %s", err)
 		}
 		defer rows.Close()
 
@@ -174,16 +173,16 @@ func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
 			var subject string
 			var count int
 			if err = rows.Scan(&subject, &count); err != nil {
-				w.WriteHeader(500)
+				log.Printf("SummarizeEvents (Scan): %s", err)
+				http.Error(w, "Database error", http.StatusInternalServerError)
 				return
-				//return nil, fmt.Errorf("SummarizeEvents (Scan): %s", err)
 			}
 			res[subject] = count
 		}
 		if err = rows.Err(); err != nil {
-			w.WriteHeader(500)
+			log.Printf("SummarizeEvents (Err): %s", err)
+			http.Error(w, "Database error", http.StatusInternalServerError)
 			return
-			//return nil, fmt.Errorf("SummarizeEvents (Err): %s", err)
 		}
 	}
 }
