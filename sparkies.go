@@ -12,6 +12,8 @@ import (
 	"github.com/SparkPost/gopg"
 	"github.com/SparkPost/httpdump/storage"
 	"github.com/SparkPost/httpdump/storage/pg"
+
+	"github.com/husobee/vestigo"
 )
 
 var word *re.Regexp = re.MustCompile(`^\w*$`)
@@ -109,9 +111,11 @@ func main() {
 
 	// TODO: handler to generate html with mailto links for each entry
 
+	router := vestigo.NewRouter()
+
 	// Install handler to store votes in database (incoming webhook events)
-	http.HandleFunc("/cast_vote", reqDumper)
+	router.Post("/incoming", reqDumper)
 
 	portSpec := fmt.Sprintf(":%s", cfg["SPARKIES_HTTP_PORT"])
-	log.Fatal(http.ListenAndServe(portSpec, nil))
+	log.Fatal(http.ListenAndServe(portSpec, router))
 }
