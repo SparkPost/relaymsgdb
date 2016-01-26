@@ -4,7 +4,7 @@
 	"Deps": [
 		{
 			"ImportPath": "github.com/SparkPost/gopg",
-			"Rev": "b21de99b39c60d3d0701d10e9094f3d61eac24c9"
+			"Rev": "130a9c373c7cedfdefe777d46bf594fabf78b6c8"
 		},
 		{
 			"ImportPath": "github.com/SparkPost/gosparkpost/events",
