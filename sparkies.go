@@ -44,8 +44,8 @@ func main() {
 	}
 
 	// Set defaults
-	if cfg["SPARKIES_HTTP_PORT"] == "" {
-		cfg["SPARKIES_HTTP_PORT"] = "80"
+	if cfg["PORT"] == "" {
+		cfg["PORT"] = "5000"
 	}
 	if cfg["SPARKIES_BATCH_INTERVAL"] == "" {
 		cfg["SPARKIES_BATCH_INTERVAL"] = "10"
