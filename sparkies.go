@@ -127,6 +127,6 @@ func main() {
 	router.Post("/incoming", reqDumper)
 	router.Get("/summary/:localpart", msgParser.SummaryHandler())
 
-	portSpec := fmt.Sprintf(":%s", cfg["SPARKIES_HTTP_PORT"])
+	portSpec := fmt.Sprintf(":%s", cfg["PORT"])
 	log.Fatal(http.ListenAndServe(portSpec, router))
 }
