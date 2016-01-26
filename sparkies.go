@@ -25,7 +25,7 @@ func main() {
 
 	// Set up validation for config from our environment.
 	envVars := map[string]*re.Regexp{
-		"SPARKIES_HTTP_PORT":      digits,
+		"PORT":                    digits,
 		"DATABASE_URL":            nows,
 		"SPARKIES_PG_DB":          word,
 		"SPARKIES_PG_SCHEMA":      word,
