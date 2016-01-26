@@ -149,6 +149,11 @@ func (p *RelayMsgParser) StoreEvent(msg *events.RelayMessage) error {
 	return nil
 }
 
+type SummaryResponse struct {
+	Subject string `json:"subject"`
+	Count   int    `json:"count"`
+}
+
 func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		localpart := vestigo.Param(r, "localpart")
@@ -165,19 +170,18 @@ func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
 		}
 		defer rows.Close()
 
-		res := map[string]int{}
+		res := map[string][]SummaryResponse{}
 		for rows.Next() {
 			if rows.Err() == io.EOF {
 				break
 			}
-			var subject string
-			var count int
-			if err = rows.Scan(&subject, &count); err != nil {
+			s := SummaryResponse{}
+			if err = rows.Scan(&s.Subject, &s.Count); err != nil {
 				log.Printf("SummarizeEvents (Scan): %s", err)
 				http.Error(w, "Database error", http.StatusInternalServerError)
 				return
 			}
-			res[subject] = count
+			res["results"] = append(res["results"], s)
 		}
 		if err = rows.Err(); err != nil {
 			log.Printf("SummarizeEvents (Err): %s", err)
