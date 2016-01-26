@@ -1,0 +1,28 @@
+{
+	"ImportPath": "github.com/sparkpost/sparkies",
+	"GoVersion": "go1.5",
+	"Deps": [
+		{
+			"ImportPath": "github.com/SparkPost/gopg",
+			"Rev": "130a9c373c7cedfdefe777d46bf594fabf78b6c8"
+		},
+		{
+			"ImportPath": "github.com/SparkPost/gosparkpost/events",
+			"Rev": "e794fab2bcb830c897541caf7c8f2f17f17d9e74"
+		},
+		{
+			"ImportPath": "github.com/SparkPost/httpdump/storage",
+			"Rev": "41b7a1b157f0a5e42bf2a00f25be837ac1eb54d1"
+		},
+		{
+			"ImportPath": "github.com/husobee/vestigo",
+			"Comment": "v1-3-gf46c4b0",
+			"Rev": "f46c4b098c11d5c60fd9046ffa0fb9e2b2c2bdb2"
+		},
+		{
+			"ImportPath": "github.com/lib/pq",
+			"Comment": "go1.0-cutoff-74-g8ad2b29",
+			"Rev": "8ad2b298cadd691a77015666a5372eae5dbfac8f"
+		}
+	]
+}

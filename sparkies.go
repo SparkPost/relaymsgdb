@@ -9,11 +9,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/SparkPost/gopg"
-	"github.com/SparkPost/httpdump/storage"
-	"github.com/SparkPost/httpdump/storage/pg"
+	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gopg"
+	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
+	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage/pg"
 
-	"github.com/husobee/vestigo"
+	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/husobee/vestigo"
 )
 
 var word *re.Regexp = re.MustCompile(`^\w*$`)
@@ -25,7 +25,7 @@ func main() {
 
 	// Set up validation for config from our environment.
 	envVars := map[string]*re.Regexp{
-		"SPARKIES_HTTP_PORT":      digits,
+		"PORT":                    digits,
 		"DATABASE_URL":            nows,
 		"SPARKIES_PG_DB":          word,
 		"SPARKIES_PG_SCHEMA":      word,
@@ -44,8 +44,8 @@ func main() {
 	}
 
 	// Set defaults
-	if cfg["SPARKIES_HTTP_PORT"] == "" {
-		cfg["SPARKIES_HTTP_PORT"] = "80"
+	if cfg["PORT"] == "" {
+		cfg["PORT"] = "5000"
 	}
 	if cfg["SPARKIES_BATCH_INTERVAL"] == "" {
 		cfg["SPARKIES_BATCH_INTERVAL"] = "10"
@@ -127,6 +127,6 @@ func main() {
 	router.Post("/incoming", reqDumper)
 	router.Get("/summary/:localpart", msgParser.SummaryHandler())
 
-	portSpec := fmt.Sprintf(":%s", cfg["SPARKIES_HTTP_PORT"])
+	portSpec := fmt.Sprintf(":%s", cfg["PORT"])
 	log.Fatal(http.ListenAndServe(portSpec, router))
 }
