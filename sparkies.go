@@ -33,6 +33,7 @@ func main() {
 		"SPARKIES_PG_PASS":        nows,
 		"SPARKIES_BATCH_INTERVAL": digits,
 		"SPARKIES_INBOUND_DOMAIN": nows,
+		"SPARKIES_ALLOWED_ORIGIN": nows,
 	}
 	// Config container
 	cfg := map[string]string{}
@@ -122,6 +123,12 @@ func main() {
 	// TODO: handler to generate html with mailto links for each entry
 
 	router := vestigo.NewRouter()
+
+	router.SetGlobalCors(&vestigo.CorsAccessControl{
+		AllowOrigin:   []string{cfg["SPARKIES_ALLOWED_ORIGIN"]},
+		ExposeHeaders: []string{"accept"},
+		AllowHeaders:  []string{"accept"},
+	})
 
 	// Install handler to store votes in database (incoming webhook events)
 	router.Post("/incoming", reqDumper)
