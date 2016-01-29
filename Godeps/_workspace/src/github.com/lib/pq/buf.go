@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/lib/pq/oid"
+	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/lib/pq/oid"
 )
 
 type readBuf []byte

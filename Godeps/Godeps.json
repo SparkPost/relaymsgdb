@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/sparkpost/sparkies",
+	"ImportPath": "github.com/Sparkpost/sparkies",
 	"GoVersion": "go1.5",
 	"Deps": [
 		{
@@ -16,8 +16,8 @@
 		},
 		{
 			"ImportPath": "github.com/husobee/vestigo",
-			"Comment": "v1-3-gf46c4b0",
-			"Rev": "f46c4b098c11d5c60fd9046ffa0fb9e2b2c2bdb2"
+			"Comment": "v1.0.1",
+			"Rev": "9dfd4d2384383143ae77e2dd52fe0cdb71470b98"
 		},
 		{
 			"ImportPath": "github.com/lib/pq",

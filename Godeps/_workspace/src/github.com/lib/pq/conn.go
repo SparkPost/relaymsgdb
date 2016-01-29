@@ -22,7 +22,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/lib/pq/oid"
+	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/lib/pq/oid"
 )
 
 // Common error types

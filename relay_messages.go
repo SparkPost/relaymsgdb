@@ -10,11 +10,11 @@ import (
 	re "regexp"
 	"strings"
 
-	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gopg"
-	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gosparkpost/events"
-	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
+	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gopg"
+	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gosparkpost/events"
+	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
 
-	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/husobee/vestigo"
+	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/husobee/vestigo"
 )
 
 type RelayMsgParser struct {

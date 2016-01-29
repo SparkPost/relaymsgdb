@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
 	sqlite3 "github.com/mattn/go-sqlite3"
-	"github.com/sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
 )
 
 // https://www.sqlite.org/rescode.html
