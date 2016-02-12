@@ -9,12 +9,14 @@ import (
 	"net/http"
 	re "regexp"
 	"strings"
+	"time"
 
 	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gopg"
 	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gosparkpost/events"
 	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
 
 	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/husobee/vestigo"
+	cache "github.com/patrickmn/go-cache"
 )
 
 const MaxMessageSize int = 8 * 1024
@@ -161,8 +163,19 @@ type SummaryResponse struct {
 }
 
 func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
+	// Initialize cache container with 1 second TTL, checks running twice a second.
+	c := cache.New(1*time.Second, 500*time.Millisecond)
 	return func(w http.ResponseWriter, r *http.Request) {
 		localpart := vestigo.Param(r, "localpart")
+
+		// Check cache first
+		jsonBytes, found := c.Get(localpart)
+		if found {
+			log.Printf("SummarizeEvents (cache): hit for [%s]", localpart)
+			w.Write(jsonBytes)
+			return
+		}
+
 		rows, err := p.Dbh.Query(fmt.Sprintf(`
 			SELECT subject, count(*)
 				FROM %s.relay_messages
@@ -201,6 +214,9 @@ func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
 			http.Error(w, "Encoding error", http.StatusInternalServerError)
 			return
 		}
+
+		// Add result to cache
+		c.Set(localpart, jsonBytes, cache.DefaultExpiration)
 
 		w.Write(jsonBytes)
 	}
