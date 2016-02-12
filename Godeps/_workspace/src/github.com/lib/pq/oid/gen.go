@@ -11,7 +11,7 @@ import (
 	"os"
 	"os/exec"
 
-	_ "github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/lib/pq"
+	_ "github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/lib/pq"
 )
 
 func main() {

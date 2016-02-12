@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gopg"
-	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
-	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/lib/pq"
+	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gopg"
+	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
+	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/lib/pq"
 )
 
 type PgDumper struct {

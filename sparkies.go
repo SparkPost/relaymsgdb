@@ -9,11 +9,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gopg"
-	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
-	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage/pg"
+	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gopg"
+	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
+	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage/pg"
 
-	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/husobee/vestigo"
+	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/husobee/vestigo"
 )
 
 var word *re.Regexp = re.MustCompile(`^\w*$`)
