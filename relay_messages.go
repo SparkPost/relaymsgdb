@@ -17,6 +17,8 @@ import (
 	"github.com/Sparkpost/sparkies/Godeps/_workspace/src/github.com/husobee/vestigo"
 )
 
+const MaxMessageSize int = 8 * 1024
+
 type RelayMsgParser struct {
 	Schema string
 	Domain string
@@ -135,6 +137,10 @@ func (p *RelayMsgParser) ParseEvent(j *json.RawMessage) error {
 }
 
 func (p *RelayMsgParser) StoreEvent(msg *events.RelayMessage) error {
+	if len(msg.Content.Email) >= MaxMessageSize {
+		return fmt.Errorf("StoreEvent (size): ignoring message from %s, size %d\n",
+			msg.From, len(msg.Content.Email))
+	}
 	_, err := p.Dbh.Exec(fmt.Sprintf(`
 		INSERT INTO %s.relay_messages (
 			webhook_id, smtp_from, smtp_to,
