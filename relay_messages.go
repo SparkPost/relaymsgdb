@@ -169,8 +169,9 @@ func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
 		localpart := vestigo.Param(r, "localpart")
 
 		// Check cache first
-		jsonBytes, found := c.Get(localpart)
+		jsonUntyped, found := c.Get(localpart)
 		if found {
+			jsonBytes := jsonUntyped.([]byte)
 			log.Printf("SummarizeEvents (cache): hit for [%s]", localpart)
 			w.Write(jsonBytes)
 			return
