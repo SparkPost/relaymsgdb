@@ -84,7 +84,7 @@ user=# select * from request_dump.relay_messages;
 
 # Deploying
 
-To deploy the code to Heroku, ensure you are authenticated as the appteam user. Then run the following commands to deploy:
+To deploy the code to Heroku, ensure you are authenticated as the correct user. Then run the following commands to deploy:
 
 ```bash
 $ git push heroku && git push heroku master
