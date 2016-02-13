@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
+	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
 	sqlite3 "github.com/mattn/go-sqlite3"
 )
 

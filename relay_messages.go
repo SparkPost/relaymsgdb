@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gopg"
-	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/SparkPost/gosparkpost/events"
-	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
+	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/gopg"
+	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/gosparkpost/events"
+	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
 
-	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/husobee/vestigo"
-	cache "github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/patrickmn/go-cache"
+	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/husobee/vestigo"
+	cache "github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/patrickmn/go-cache"
 )
 
 const MaxMessageSize int = 8 * 1024

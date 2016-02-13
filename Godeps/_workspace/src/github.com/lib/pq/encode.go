@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/SparkPost/sparkies/Godeps/_workspace/src/github.com/lib/pq/oid"
+	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/lib/pq/oid"
 )
 
 func binaryEncode(parameterStatus *parameterStatus, x interface{}) []byte {
