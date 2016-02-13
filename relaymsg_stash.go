@@ -33,7 +33,7 @@ func main() {
 		"RELAYMSG_PG_PASS":        nows,
 		"RELAYMSG_BATCH_INTERVAL": digits,
 		"RELAYMSG_INBOUND_DOMAIN": nows,
-		"RELAYMSG_ALLOWED_ORIGIN": nows,
+		"SPARKIES_ALLOWED_ORIGIN": nows,
 	}
 	// Config container
 	cfg := map[string]string{}
@@ -120,12 +120,10 @@ func main() {
 		}
 	}()
 
-	// TODO: handler to generate html with mailto links for each entry
-
 	router := vestigo.NewRouter()
 
 	router.SetGlobalCors(&vestigo.CorsAccessControl{
-		AllowOrigin:   []string{cfg["RELAYMSG_ALLOWED_ORIGIN"]},
+		AllowOrigin:   []string{cfg["SPARKIES_ALLOWED_ORIGIN"]},
 		ExposeHeaders: []string{"accept"},
 		AllowHeaders:  []string{"accept"},
 	})
