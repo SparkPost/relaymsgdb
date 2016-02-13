@@ -27,13 +27,13 @@ func main() {
 	envVars := map[string]*re.Regexp{
 		"PORT":                    digits,
 		"DATABASE_URL":            nows,
-		"SPARKIES_PG_DB":          word,
-		"SPARKIES_PG_SCHEMA":      word,
-		"SPARKIES_PG_USER":        word,
-		"SPARKIES_PG_PASS":        nows,
-		"SPARKIES_BATCH_INTERVAL": digits,
-		"SPARKIES_INBOUND_DOMAIN": nows,
-		"SPARKIES_ALLOWED_ORIGIN": nows,
+		"RELAYMSG_PG_DB":          word,
+		"RELAYMSG_PG_SCHEMA":      word,
+		"RELAYMSG_PG_USER":        word,
+		"RELAYMSG_PG_PASS":        nows,
+		"RELAYMSG_BATCH_INTERVAL": digits,
+		"RELAYMSG_INBOUND_DOMAIN": nows,
+		"RELAYMSG_ALLOWED_ORIGIN": nows,
 	}
 	// Config container
 	cfg := map[string]string{}
@@ -48,21 +48,21 @@ func main() {
 	if cfg["PORT"] == "" {
 		cfg["PORT"] = "5000"
 	}
-	if cfg["SPARKIES_BATCH_INTERVAL"] == "" {
-		cfg["SPARKIES_BATCH_INTERVAL"] = "10"
+	if cfg["RELAYMSG_BATCH_INTERVAL"] == "" {
+		cfg["RELAYMSG_BATCH_INTERVAL"] = "10"
 	}
-	batchInterval, err := strconv.Atoi(cfg["SPARKIES_BATCH_INTERVAL"])
+	batchInterval, err := strconv.Atoi(cfg["RELAYMSG_BATCH_INTERVAL"])
 	if err != nil {
 		log.Fatal(err)
 	}
-	if cfg["SPARKIES_INBOUND_DOMAIN"] == "" {
-		cfg["SPARKIES_INBOUND_DOMAIN"] = "hey.avocado.industries"
+	if cfg["RELAYMSG_INBOUND_DOMAIN"] == "" {
+		cfg["RELAYMSG_INBOUND_DOMAIN"] = "hey.avocado.industries"
 	}
 
 	pgcfg := &gopg.Config{
-		Db:   cfg["SPARKIES_PG_DB"],
-		User: cfg["SPARKIES_PG_USER"],
-		Pass: cfg["SPARKIES_PG_PASS"],
+		Db:   cfg["RELAYMSG_PG_DB"],
+		User: cfg["RELAYMSG_PG_USER"],
+		Pass: cfg["RELAYMSG_PG_PASS"],
 		Opts: map[string]string{
 			"sslmode": "disable",
 		},
@@ -74,7 +74,7 @@ func main() {
 	}
 
 	// Configure PostgreSQL dumper with connection details.
-	schema := cfg["SPARKIES_PG_SCHEMA"]
+	schema := cfg["RELAYMSG_PG_SCHEMA"]
 	if schema == "" {
 		schema = "request_dump"
 	}
@@ -100,7 +100,7 @@ func main() {
 	msgParser := &RelayMsgParser{
 		Dbh:    dbh,
 		Schema: schema,
-		Domain: cfg["SPARKIES_INBOUND_DOMAIN"],
+		Domain: cfg["RELAYMSG_INBOUND_DOMAIN"],
 	}
 
 	// recurring job to transform blobs of webhook data into relay_messages
@@ -125,7 +125,7 @@ func main() {
 	router := vestigo.NewRouter()
 
 	router.SetGlobalCors(&vestigo.CorsAccessControl{
-		AllowOrigin:   []string{cfg["SPARKIES_ALLOWED_ORIGIN"]},
+		AllowOrigin:   []string{cfg["RELAYMSG_ALLOWED_ORIGIN"]},
 		ExposeHeaders: []string{"accept"},
 		AllowHeaders:  []string{"accept"},
 	})
