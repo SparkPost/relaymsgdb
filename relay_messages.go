@@ -64,8 +64,8 @@ func SchemaInit(dbh *sql.DB, schema string) error {
 					status_id   integer default 0
 				)
 			`, schema, table),
-			fmt.Sprintf("CREATE INDEX relay_messages_smtp_to_idx ON %s.%s (smtp_to)",
-				schema, table),
+			fmt.Sprintf("CREATE INDEX %s_smtp_to_smtp_from_idx ON %s.%s (smtp_to, smtp_from)",
+				table, schema, table),
 		}
 		for _, ddl := range ddls {
 			_, err := dbh.Exec(ddl)
@@ -178,7 +178,7 @@ func (p *RelayMsgParser) SummaryHandler() http.HandlerFunc {
 		}
 
 		rows, err := p.Dbh.Query(fmt.Sprintf(`
-			SELECT subject, count(*)
+			SELECT subject, count(distinct(smtp_from))
 				FROM %s.relay_messages
 			 WHERE smtp_to = $1 ||'@'|| $2
 			 GROUP BY 1
