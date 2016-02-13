@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/SparkPost/sparkies",
+	"ImportPath": "github.com/SparkPost/go_relaymsg_stash",
 	"GoVersion": "go1.5",
 	"Deps": [
 		{
