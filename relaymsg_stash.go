@@ -31,6 +31,7 @@ func main() {
 		"RELAYMSG_PG_SCHEMA":      word,
 		"RELAYMSG_PG_USER":        word,
 		"RELAYMSG_PG_PASS":        nows,
+		"RELAYMSG_PG_MAX_CONNS":   digits,
 		"RELAYMSG_BATCH_INTERVAL": digits,
 		"RELAYMSG_INBOUND_DOMAIN": nows,
 		"RELAYMSG_ALLOWED_ORIGIN": nows,
@@ -58,6 +59,13 @@ func main() {
 	if cfg["RELAYMSG_INBOUND_DOMAIN"] == "" {
 		cfg["RELAYMSG_INBOUND_DOMAIN"] = "hey.avocado.industries"
 	}
+	if cfg["RELAYMSG_PG_MAX_CONNS"] == "" {
+		cfg["RELAYMSG_PG_MAX_CONNS"] = "18"
+	}
+	maxConns, err := strconv.Atoi(cfg["RELAYMSG_PG_MAX_CONNS"])
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	pgcfg := &gopg.Config{
 		Db:   cfg["RELAYMSG_PG_DB"],
@@ -71,6 +79,9 @@ func main() {
 	dbh, err := gopg.Connect(pgcfg)
 	if err != nil {
 		log.Fatal(err)
+	}
+	if maxConns > 0 {
+		dbh.SetMaxOpenConns(maxConns)
 	}
 
 	// Configure PostgreSQL dumper with connection details.
