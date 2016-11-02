@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/gopg"
-	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/gosparkpost/events"
-	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
+	"github.com/SparkPost/gosparkpost/events"
+	"github.com/SparkPost/httpdump/storage"
+	"github.com/SparkPost/httpdump/storage/pg"
 
-	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/husobee/vestigo"
-	cache "github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/patrickmn/go-cache"
+	"github.com/husobee/vestigo"
+	cache "github.com/patrickmn/go-cache"
 )
 
 const MaxMessageSize int = 8 * 1024
@@ -35,7 +35,7 @@ func SchemaInit(dbh *sql.DB, schema string) error {
 		return fmt.Errorf("SchemaInit: schemas containing a space are not supported")
 	}
 
-	exists, err := gopg.SchemaExists(dbh, schema)
+	exists, err := pg.SchemaExists(dbh, schema)
 	if err != nil {
 		return err
 	}
@@ -44,7 +44,7 @@ func SchemaInit(dbh *sql.DB, schema string) error {
 	}
 
 	table := "relay_messages"
-	exists, err = gopg.TableExistsInSchema(dbh, table, schema)
+	exists, err = pg.TableExistsInSchema(dbh, table, schema)
 	if err != nil {
 		return err
 	}

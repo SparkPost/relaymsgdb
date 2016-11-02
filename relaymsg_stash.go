@@ -9,11 +9,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/gopg"
-	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage"
-	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/SparkPost/httpdump/storage/pg"
+	"github.com/SparkPost/httpdump/storage"
+	"github.com/SparkPost/httpdump/storage/pg"
 
-	"github.com/SparkPost/go_relaymsg_stash/Godeps/_workspace/src/github.com/husobee/vestigo"
+	"github.com/husobee/vestigo"
 )
 
 var word *re.Regexp = re.MustCompile(`^\w*$`)
@@ -67,7 +66,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	pgcfg := &gopg.Config{
+	pgcfg := &pg.PGConfig{
 		Db:   cfg["RELAYMSG_PG_DB"],
 		User: cfg["RELAYMSG_PG_USER"],
 		Pass: cfg["RELAYMSG_PG_PASS"],
@@ -76,7 +75,7 @@ func main() {
 		},
 		Url: cfg["DATABASE_URL"],
 	}
-	dbh, err := gopg.Connect(pgcfg)
+	dbh, err := pgcfg.Connect()
 	if err != nil {
 		log.Fatal(err)
 	}
