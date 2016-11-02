@@ -1,0 +1,55 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "sqFK16hXdnk+P+AgIvNUOIIH4vE=",
+			"path": "github.com/SparkPost/gosparkpost/events",
+			"revision": "43b46265d29070d923bb8877e1a50e86de006a80",
+			"revisionTime": "2016-10-12T17:21:56Z"
+		},
+		{
+			"checksumSHA1": "tQgiz8xyDm1WJfLOK4VKAueZf/M=",
+			"path": "github.com/SparkPost/httpdump/storage",
+			"revision": "0b18c8ea742f9d6c8292d8d1e4f63890695ea02d",
+			"revisionTime": "2016-11-02T15:28:29Z"
+		},
+		{
+			"checksumSHA1": "T5fnhPuJzf635BZW9NNADPlbZaM=",
+			"path": "github.com/SparkPost/httpdump/storage/pg",
+			"revision": "0b18c8ea742f9d6c8292d8d1e4f63890695ea02d",
+			"revisionTime": "2016-11-02T15:28:29Z"
+		},
+		{
+			"checksumSHA1": "BxlgQkrnhMVy/PevuzmT3P6ZtM8=",
+			"path": "github.com/husobee/vestigo",
+			"revision": "f46c4b098c11d5c60fd9046ffa0fb9e2b2c2bdb2",
+			"revisionTime": "2015-12-10T23:34:05Z"
+		},
+		{
+			"checksumSHA1": "QK3MNUdQwUBuznCHZcPijU/3DyI=",
+			"path": "github.com/lib/pq",
+			"revision": "4dd446efc17690bc53e154025146f73203b18309",
+			"revisionTime": "2016-06-23T22:06:37Z"
+		},
+		{
+			"checksumSHA1": "xppHi82MLqVx1eyQmbhTesAEjx8=",
+			"path": "github.com/lib/pq/oid",
+			"revision": "4dd446efc17690bc53e154025146f73203b18309",
+			"revisionTime": "2016-06-23T22:06:37Z"
+		},
+		{
+			"checksumSHA1": "0YgW0+rmiIzLlvhIKlQ0s0olPg8=",
+			"path": "github.com/mattn/go-sqlite3",
+			"revision": "e5a3c16c5c1d80b24f633e68aecd6b0702786d3d",
+			"revisionTime": "2016-10-04T16:01:36Z"
+		},
+		{
+			"checksumSHA1": "vNL7xL08iaySNAxSUz+AoXGu3DQ=",
+			"path": "github.com/patrickmn/go-cache",
+			"revision": "1881a9bccb818787f68c52bfba648c6cf34c34fa",
+			"revisionTime": "2016-01-27T17:00:04Z"
+		}
+	],
+	"rootPath": "github.com/SparkPost/relaymsgdb"
+}
