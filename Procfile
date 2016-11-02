@@ -1,1 +1,1 @@
-web: go_relaymsg_stash
+web: relaymsgdb
